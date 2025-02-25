@@ -25,19 +25,13 @@
         weatherData.value.text = data.weather[0].description;
         weatherData.value.location = data.sys.country;
         weatherData.value.city = data.name;
-        console.log(weatherData.value);
       })
   })
 </script>
 
 <template>
   <Navbar/>
-  <MainComp/>
-
-  <p>{{ weatherData.icon }}</p>
-  <p>{{  weatherData.temp }}</p>
-  <p>{{  weatherData.location }}</p>
-  <p>{{  weatherData.city }}</p>
+  <MainComp :weatherData="weatherData"/>
 </template>
 
 <style scoped lang="scss">
