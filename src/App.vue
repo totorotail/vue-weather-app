@@ -11,11 +11,6 @@
   onMounted(() => {
     store.dispatch('getWeather');
   })
-
-  const onSearchCity = (city) => {
-    weatherData.value.city = city;
-    getWeather();
-  }
 </script>
 
 <template>
