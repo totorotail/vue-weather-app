@@ -1,10 +1,9 @@
-import { createStore } from 'vuex';
+import { defineStore } from 'pinia';
 
 // store 만들기
-export default createStore({
-  state: {
-    // initial state
-    count: 0,
+export const useStore = defineStore('main', {
+  state: () => ({
+    // 상태변수 정의
     weatherData: {
       icon: 'icon',
       temp: 0,
@@ -13,36 +12,36 @@ export default createStore({
       city: 'Seoul',
     },
     toggle: false, // true일때 about을 보여주기
-  },
-  mutations: {
-    // mutations(데이터 변경)
-    addCount(state, palyload) { 
-      state.count += 1 + palyload;
+  }),
+  actions: {
+    // 함수
+    addCount(palyload) { 
+      this.count += 1 + palyload;
     },
-    updateWeather(state, payload) {
-      state.weatherData.icon = payload.weather[0].icon;
-      state.weatherData.temp = payload.main.temp;
-      state.weatherData.text = payload.weather[0].description;
-      state.weatherData.location = payload.sys.country;
-      state.weatherData.city = payload.name;
+    updateWeather(payload) {
+      this.weatherData.icon = payload.weather[0].icon;
+      this.weatherData.temp = payload.main.temp;
+      this.weatherData.text = payload.weather[0].description;
+      this.weatherData.location = payload.sys.country;
+      this.weatherData.city = payload.name;
     },
-    onSearchCity(state, payload) {
-      state.weatherData.city = payload;
+    onSearchCity(payload) {
+      this.weatherData.city = payload;
     },
     toggleButton (state) {
-      state.toggle = !state.toggle;
-    }
-  },
-  actions: {
-    getWeather(context) {
+      this.toggle = !this.toggle;
+    },
+    // 비동기 함수 async 
+    async getWeather() {
       const API_KEY = import.meta.env.VITE_API_KEY;
-      const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${context.state.weatherData.city}&appid=${API_KEY}`
-      fetch(API_URL)
+      const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${this.weatherData.city}&appid=${API_KEY}`
+      await fetch(API_URL)
         .then(res => res.json())
         .then(data => {
           console.log(data);
           // mutation 함수로 날씨 정보 업데이트
-          context.commit('updateWeather', data);
+          // context.commit('updateWeather', data);
+          this.updateWeather(data);
         })
         .catch(err => {
           alert('에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
