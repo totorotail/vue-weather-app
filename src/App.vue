@@ -19,7 +19,6 @@
 </script>
 
 <template>
-  <!-- <button @click="$store.dispatch('getWeather')">getWeather</button> -->
   <Navbar/>
   <div v-if="!$store.state.toggle">
     <MainComp/>
